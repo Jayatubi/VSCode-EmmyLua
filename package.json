@@ -1,6 +1,6 @@
 {
-    "name": "emmylua",
-    "displayName": "EmmyLua",
+    "name": "emmylua-osg",
+    "displayName": "EmmyLua - OSG",
     "description": "EmmyLua for vscode",
     "version": "0.5.11",
     "icon": "res/icon.png",
