@@ -43,4 +43,4 @@ async function build() {
     // await fc('temp/EmmyLua-LS-all.jar', 'server/EmmyLua-LS-all.jar', { mkdirp: true });
 }
 
-build().catch(console.error);
+// build().catch(console.error);

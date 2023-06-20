@@ -4,7 +4,7 @@ import { Handles } from "vscode-debugadapter";
 
 export interface IEmmyStackContext {
     handles: Handles<IEmmyStackNode>;
-    eval(expr: string, cacheId: number, depth: number): Promise<proto.IEvalRsp>;
+    eval(expr: string, cacheId: number, depth: number, stackLevel: number): Promise<proto.IEvalRsp>;
 }
 
 export interface IEmmyStackNode {
@@ -48,7 +48,7 @@ export class EmmyStackENV implements IEmmyStackNode {
             const _ENV = new EmmyVariable(variable);
             return await _ENV.computeChildren(ctx);
         } else {
-            const _GVariable = await ctx.eval("_G", 0, 1);
+            const _GVariable = await ctx.eval("_G", 0, 1, -1);
             if (_GVariable.success) {
                 const _G = new EmmyVariable(_GVariable.value)
                 return await _G.computeChildren(ctx);
@@ -120,7 +120,7 @@ export class EmmyVariable implements IEmmyStackNode {
             children = this.data.children;
         }
         else {
-            const evalResp = await ctx.eval(this.getExpr(), this.data.cacheId, 2);
+            const evalResp = await ctx.eval(this.getExpr(), this.data.cacheId, 2, -1);
             if (evalResp.success) {
                 children = evalResp.value.children;
             }

@@ -258,7 +258,7 @@ export class EmmyDebugSession extends DebugSession implements IEmmyStackContext 
     }
 
     protected async evaluateRequest(response: DebugProtocol.EvaluateResponse, args: DebugProtocol.EvaluateArguments): Promise<void> {
-        const evalResp = await this.eval(args.expression, 0);
+        const evalResp = await this.eval(args.expression, 0, 1, args.frameId);
         if (evalResp.success) {
             const emmyVar = new EmmyVariable(evalResp.value);
             const variable = emmyVar.toVariable(this);
@@ -278,11 +278,11 @@ export class EmmyDebugSession extends DebugSession implements IEmmyStackContext 
         this.sendResponse(response);
     }
 
-    async eval(expr: string, cacheId: number, depth: number = 1): Promise<proto.IEvalRsp> {
+    async eval(expr: string, cacheId: number, depth: number = 1, stackLevel: number = -1): Promise<proto.IEvalRsp> {
         const req: proto.IEvalReq = {
             cmd: proto.MessageCMD.EvalReq,
             seq: this.evalIdCount++,
-            stackLevel: this.currentFrameId,
+            stackLevel: stackLevel >= 0 ? stackLevel : this.currentFrameId,
             expr: expr,
             depth: depth,
             cacheId: cacheId
